@@ -30,8 +30,6 @@ nogit/
 test_nogit.py
 
 /cpp/out/
-build/
-dist/
 cmake-build-*/
 dist_release/
 CMakeUserPresets.json
