@@ -1,0 +1,39 @@
+# Use the official Python 3.11 slim image for ARM64 (Debian Bookworm based)
+FROM python:3.11-slim-bookworm
+
+# Avoid prompts during package installation
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install build dependencies using apt-get
+# Explicitly add gcc and g++
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    build-essential zip unzip tar \
+    libpcre3-dev \
+    libsasl2-dev \
+    libsodium-dev \
+    libkrb5-dev \
+    libcurl4-openssl-dev \
+    git bison flex ninja-build \
+    cmake curl pkg-config \
+    g++-10 \
+    # gcc/g++ are included in build-essential
+    && rm -rf /var/lib/apt/lists/*
+
+# Explicitly set compiler paths for CMake
+ENV CC=/usr/bin/gcc
+ENV CXX=/usr/bin/g++
+
+# Install Python build tools using the image's pip
+RUN pip install --no-cache-dir setuptools wheel grpcio-tools
+
+# Set a working directory (optional)
+WORKDIR /workspace
+
+RUN mkdir -p arcticdb && cd arcticdb && \
+    git clone https://github.com/man-group/ArcticDB.git . && \
+    git submodule init && git submodule update
+
+# You can add CMD or ENTRYPOINT here depending on how you want to use the image
+# For example, to just open a bash shell:
+CMD ["/bin/bash"]
