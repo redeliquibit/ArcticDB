@@ -28,7 +28,8 @@ python/venvs/
 
 nogit/
 test_nogit.py
-
+dist/
+build/
 /cpp/out/
 cmake-build-*/
 dist_release/
